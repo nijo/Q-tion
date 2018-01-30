@@ -441,19 +441,19 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
 	if($scope.data.nlanguage == 'अंग्रेज़ी'){
 		$scope.data.nlanguage = 'English';
 	}
-	if($scope.data.nlanguage == 'ഇംഗ്ലീഷ്'){
+	else if($scope.data.nlanguage == 'ഇംഗ്ലീഷ്'){
 		$scope.data.nlanguage = 'English';
 	}
-	if($scope.data.nlanguage == 'मलयालम'){
+	else if($scope.data.nlanguage == 'मलयालम'){
 		$scope.data.nlanguage = 'Malayalam';
 	}
-	if($scope.data.nlanguage == 'മലയാളം'){
+	else if($scope.data.nlanguage == 'മലയാളം'){
 		$scope.data.nlanguage = 'Malayalam';
 	}
-	if($scope.data.nlanguage == 'हिंदी'){
+	else if($scope.data.nlanguage == 'हिंदी'){
 		$scope.data.nlanguage = 'Hindi';
 	}
-	if($scope.data.nlanguage == 'ഹിന്ദി'){
+	else if($scope.data.nlanguage == 'ഹിന്ദി'){
 		$scope.data.nlanguage = 'Hindi';
 	}
         $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{nlanguage: $scope.data.nlanguage, id: localStorage.getItem("id")} )
