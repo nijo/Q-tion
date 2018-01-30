@@ -343,7 +343,10 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
         nlanguage: '',
         tlanguage: carryvar.tlanguage,
         change: carryvar.change,
-        cplanguage: carryvar.cplanguage
+        cplanguage: carryvar.cplanguage,
+	    oenglish: carryvar.oenglish,
+	    ohindi: carryvar.ohindi,
+	    omalayalam: carryvar.omalayalam
     };
     
     $scope.question = function(){
