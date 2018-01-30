@@ -91,6 +91,9 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
             carryvar.attempting1 = 'You have attempted ';
             carryvar.attempting2 = ' questions correctly out of ';
             carryvar.attempting3 = ' . Click below to continue.';
+	    carryvar.oenglish = 'English';
+	    carryvar.omalayalam = 'Malayalam';
+	    carryvar.ohindi = 'Hindi';
         }
         else if(language == "Malayalam"){
             carryvar.A = 'എ';
@@ -125,6 +128,9 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
             carryvar.attempting1 = 'നിങ്ങൾ ';
             carryvar.attempting2 = ' ചോദ്യങ്ങളിൽ നിന്ന്  ';
             carryvar.attempting3 = ' ചോദ്യങ്ങൾ ശരിയായി ശ്രമിച്ചു. തുടരുന്നതിന് ചുവടെ ക്ലിക്കുചെയ്യുക.';
+		carryvar.oenglish = 'ഇംഗ്ലീഷ്';
+		carryvar.omalayalam = 'മലയാളം';
+		carryvar.ohindi = 'ഹിന്ദി';
         }
         else if(language == "Hindi"){
             carryvar.A = 'ए';
@@ -159,6 +165,9 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
             carryvar.attempting1 = 'आपने ';
             carryvar.attempting2 = ' में से ';
             carryvar.attempting3 = ' प्रश्न सही तरीके से करने का प्रयास किया है। जारी रखने के लिए नीचे क्लिक करें।';
+		carryvar.oenglish = 'अंग्रेज़ी';
+		carryvar.omalayalam = 'मलयालम';
+		carryvar.ohindi = 'हिंदी';
         }
     };
     
