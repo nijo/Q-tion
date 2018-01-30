@@ -1,0 +1,53 @@
+<ion-view title="Questions" hide-back-button="true" cache-view="false" nav-transition="none" id="page6" style="">
+  <ion-nav-buttons side="right" class="has-header">
+    <button class="button icon ion-log-out" ng-click="logout()"></button>
+  </ion-nav-buttons>
+  <ion-content padding="false" class="has-header">
+    <div id="questions-container4">
+      <div class="spacer" style="height: 30px;"></div>
+      <div id="questions-markdown7" class="show-list-numbers-and-dots question">
+        <p style="color:#000000;">
+          <strong>{{data.no}}.</strong> {{data.question}}</p>
+      </div>
+      <div class="spacer" style="height: 10px;"></div>
+      <div id="questions-container7" ng-show="data.flag == '1'">
+        <div id="questions-markdown16" style="text-align:right;" class="show-list-numbers-and-dots timer">
+          <p style="color:#000000;">{{data.timer}}s</p>
+        </div>
+        <div class="spacer" style="height: 10px;"></div>
+        <form id="questions-form8" class="list">
+          <ion-radio id="questions-radio1" name="option" ng-value="&quot;A&quot;" ng-model="data.option" ng-change="alerting()" class="dataA item-text-wrap">
+            <strong>{{data.A}} :</strong> {{data.option1}}</ion-radio>
+          <ion-radio id="questions-radio9" name="option" ng-model="data.option" ng-value="&quot;B&quot;" ng-change="alerting()" class="dataB item-text-wrap">
+            <strong>{{data.B}} :</strong> {{data.option2}}</ion-radio>
+          <ion-radio id="questions-radio10" name="option" ng-model="data.option" ng-value="&quot;C&quot;" ng-change="alerting()" class="dataC item-text-wrap">
+            <strong>{{data.C}} :</strong> {{data.option3}}</ion-radio>
+          <ion-radio id="questions-radio11" name="option" ng-model="data.option" ng-value="&quot;D&quot;" ng-change="alerting()" class="dataD item-text-wrap">
+            <strong>{{data.D}} :</strong> {{data.option4}}</ion-radio>
+          <div class="spacer" style="height: 20px;"></div>
+          <button id="questions-button6" ng-click="enter()" class="button button-positive button-block">{{data.submit}}</button>
+        </form>
+      </div>
+      <div id="questions-container9" ng-show="data.flag == '2'">
+        <div id="questions-markdown11" style="text-align:justify;" class="show-list-numbers-and-dots question">
+          <p style="color:#000000;">{{data.message1}}</p>
+        </div>
+        <div class="spacer" style="height: 10px;"></div>
+        <form id="questions-form9" class="list">
+          <ion-item class="assertive items item-text-wrap" id="questions-list-item5" ng-show="data.resp == '1'" style="">
+            <strong>{{data.E}} :</strong> {{data.options1}}</ion-item>
+          <ion-item class="balanced items item-text-wrap" id="questions-list-item6" style="">
+            <strong>{{data.F}} :</strong> {{data.options2}}</ion-item>
+          <div class="spacer" style="height: 20px;"></div>
+          <div id="questions-markdown12" style="text-align:justify;" class="show-list-numbers-and-dots question">
+            <p style="color:#000000;">{{data.message2}}</p>
+          </div>
+          <div id="questions-button-bar4" class="button-bar">
+            <button id="questions-button11" ng-click="cancel()" class="button button-calm button-block">{{data.cancel}}</button>
+            <button id="questions-button13" ng-click="next()" class="button button-positive button-block">{{data.next}}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
