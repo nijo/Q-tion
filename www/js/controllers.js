@@ -1,11 +1,11 @@
 angular.module('app.controllers', [])
-  
+
 .controller('loginCtrl', ['$scope', '$stateParams', '$http', '$ionicPopup', '$location', 'carryvar', '$state', '$ionicLoading', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 
 function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state, $ionicLoading, $timeout) {
-    
+
     $scope.data = {
         email: '',
         password: '',
@@ -38,7 +38,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
                                 carryvar.flag = '1';
                             }
                             else{
-                                carryvar.flag = '2';   
+                                carryvar.flag = '2';
                             }
                             $scope.translate(response.data.language);
                             $state.go('home');
@@ -170,7 +170,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
 		carryvar.ohindi = 'हिंदी';
         }
     };
-    
+
     $scope.showAlert = function(input) {
         if(input == "email"){
             var alertPopup = $ionicPopup.alert({
@@ -197,7 +197,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
             });
         }
     };
-    
+
     $scope.showLoading = function() {
         $ionicLoading.show({
             template: '<ion-spinner icon="dots"></ion-spinner>'
@@ -207,8 +207,8 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
     $scope.hideLoading = function(){
         $ionicLoading.hide();
     };
-    
-    $scope.$on('$stateChangeSuccess', 
+
+    $scope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams){
             var conn = $timeout( function(){
                 var alertPopup = $ionicPopup.alert({
@@ -224,9 +224,9 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
                 $state.go('home');
             }
         });
-        
+
 }])
-   
+
 .controller('signupCtrl', ['$scope', '$stateParams', '$ionicPopup', '$http', '$location', 'carryvar', '$state', '$ionicLoading', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
@@ -306,8 +306,8 @@ function ($scope, $stateParams, $ionicPopup, $http, $location, carryvar, $state,
     $scope.hideLoading = function(){
         $ionicLoading.hide();
     };
-    
-    $scope.$on('$stateChangeSuccess', 
+
+    $scope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams){
             var conn = $timeout( function(){
                 var alertPopup = $ionicPopup.alert({
@@ -321,7 +321,7 @@ function ($scope, $stateParams, $ionicPopup, $http, $location, carryvar, $state,
             });
         });
 }])
-   
+
 .controller('homeCtrl', ['$scope', '$stateParams', '$http', '$ionicPopup', '$timeout', 'carryvar', '$state', '$ionicLoading', '$interval', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
@@ -348,7 +348,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
 	    ohindi: carryvar.ohindi,
 	    omalayalam: carryvar.omalayalam
     };
-    
+
     $scope.question = function(){
             carryvar.language = $scope.data.language;
             if($scope.data.position !== ""){
@@ -390,31 +390,31 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                 $scope.data.fquest = '1';
             }
         };
-    
+
     $scope.logout = function(){
         var alertPopup = $ionicPopup.alert({
             title: carryvar.ltitle,
             template: carryvar.ltemplate,
             buttons: [
-                    { 
+                    {
                         text: carryvar.no,
                         type: 'button-calm',
                         onTap: function(e) {
                             $state.go('home');
                         }
                     },
-                    { 
+                    {
                         text: carryvar.yes,
                         type: 'button-positive',
                         onTap: function(e) {
                             localStorage.removeItem("id");
-                            $state.go('login'); 
+                            $state.go('login');
                         }
                     }
                 ]
         });
     };
-    
+
     $scope.showLoading = function() {
         $ionicLoading.show({
             template: '<ion-spinner icon="dots"></ion-spinner>'
@@ -424,7 +424,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
     $scope.hideLoading = function(){
         $ionicLoading.hide();
     };
-    
+
     $scope.setmessage = function(){
         if(carryvar.flag == '1'){
             $scope.data.message = carryvar.hi + ' ' + $scope.data.name + ',<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;' + carryvar.welcome;
@@ -436,7 +436,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
             $scope.data.message = carryvar.hi + ' ' + $scope.data.name + ',<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;' + carryvar.attempting1 + $scope.data.attempted + carryvar.attempting2 + $scope.data.correct +  carryvar.attempting3;
         }
     };
-    
+
     $scope.chglanguage = function(){
 	if($scope.data.nlanguage == 'अंग्रेज़ी'){
 		$scope.data.nlanguage = 'English';
@@ -462,28 +462,28 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                     title: carryvar.cltitle,
                     template: carryvar.cltemplate,
                     buttons: [
-                            { 
+                            {
                                 text: carryvar.no,
                                 type: 'button-calm',
                                 onTap: function(e) {
                                     $state.go('home');
                                 }
                             },
-                            { 
+                            {
                                 text: carryvar.yes,
                                 type: 'button-positive',
                                 onTap: function(e) {
                                     localStorage.removeItem("id");
-                                    $state.go('login'); 
+                                    $state.go('login');
                                 }
                             }
                         ]
                 });
             });
     };
-    
-    $scope.$on('$stateChangeSuccess', 
-        function(event, toState, toParams, fromState, fromParams){ 
+
+    $scope.$on('$stateChangeSuccess',
+        function(event, toState, toParams, fromState, fromParams){
             $scope.setmessage();
             $scope.data.name = carryvar.name;
             $scope.data.attempted = carryvar.attempted;
@@ -498,7 +498,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
             }
         });
 }])
-   
+
 .controller('questionsCtrl', ['$scope', '$stateParams', '$http', '$ionicPopup', '$timeout', 'carryvar', '$state', '$interval', '$ionicLoading', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
@@ -531,35 +531,38 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
         cancel: carryvar.cancel,
         conn: ''
     };
-    
+
     $scope.logout = function(){
         console.log("hai");
         var alertPopup = $ionicPopup.alert({
             title: carryvar.ltitle,
             template: carryvar.ltemplate,
             buttons: [
-                    { 
+                    {
                         text: carryvar.no,
                         type: 'button-calm',
                         onTap: function(e) {
                             $state.go('questions');
                         }
                     },
-                    { 
+                    {
                         text: carryvar.yes,
                         type: 'button-positive',
                         onTap: function(e) {
-                            localStorage.removeItem("id");
-                            $interval.cancel($scope.data.promise);
-                            $scope.data.promise = '';
-                            $scope.data.timer = 100000;
-                            $state.go('login'); 
+                          $http.post( "https://nijojob.heliohost.org/NewApp/www/php/index.php", {count: 1, language: carryvar.language, id: localStorage.getItem("id")})
+                            .then(function( response ) {
+                              localStorage.removeItem("id");
+                              $interval.cancel($scope.data.promise);
+                              $scope.data.promise = '';
+                              $scope.data.timer = 100000;
+                              $state.go('login');
+                            }
                         }
                     }
                 ]
-        });  
+        });
     };
-        
+
     $scope.enter = function(){
         if($scope.data.option !== ""){
             $scope.showLoading();
@@ -596,15 +599,15 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
             });
         }
     };
-        
-    $scope.$on('$stateChangeSuccess', 
-        function(event, toState, toParams, fromState, fromParams){ 
+
+    $scope.$on('$stateChangeSuccess',
+        function(event, toState, toParams, fromState, fromParams){
             $scope.finterval();
             if(angular.isNumber(localStorage.getItem("id")) == "false"){
                 $state.go('login');
             }
         });
-        
+
     $scope.showLoading = function() {
         $ionicLoading.show({
             template: '<ion-spinner icon="dots"></ion-spinner>'
@@ -614,12 +617,12 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
     $scope.hideLoading = function(){
         $ionicLoading.hide();
     };
-    
+
     $scope.finterval = function() {
         $scope.data.promise = $interval(function() {
                 if ($scope.data.timer > 0) {
                     $scope.data.timer -= 1;
-                } 
+                }
                 else {
                     $interval.cancel($scope.data.promise);
                     $scope.data.promise = '';
@@ -676,7 +679,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
         $scope.data.message2 = carryvar.forward;
         $scope.data.flag = '2';
     };
-    
+
     $scope.next = function(){
         $scope.showLoading();
         $scope.data.conn = $timeout( function(){
@@ -718,7 +721,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                     });
 			});
     };
-    
+
     $scope.cancel = function(){
         $scope.showLoading();
         $scope.data.conn = $timeout( function(){
@@ -741,7 +744,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                 $state.go('home', $stateParams, {reload: true, inherit: false});
             });
     };
-    
+
     $scope.alerting = function() {
         var myF = angular.element( document.querySelector( '.nijo' ) );
         myF.removeClass('nijo');
@@ -767,4 +770,3 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
         }
     };
 }])
- 
