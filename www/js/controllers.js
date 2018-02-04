@@ -237,6 +237,7 @@ function ($scope, $stateParams, $ionicPopup, $http, $location, carryvar, $state,
         password: '',
         cpassword: '',
         language: '',
+        conn: '',
         signup: function(){
             if($scope.data.name === ""){
                 $scope.showAlert("name");
@@ -252,13 +253,20 @@ function ($scope, $stateParams, $ionicPopup, $http, $location, carryvar, $state,
             }
             else{
                 $scope.showLoading();
+                $scope.data.conn = $timeout( function(){
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Connection Error!!!',
+                        template: 'Connection to internet/server has been lost. Please try after sometime...'
+                    });
+                }, 5000 );
                 $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{name: this.name, email: this.email, passwd: this.password, language: this.language})
                     .then(function (response) {
                         $scope.hideLoading();
-                        if(response.data == "email"){
+                        $interval.cancel($scope.data.conn);
+                        if(response.data.answer == "email"){
                             $scope.showAlert("email");
                         }
-                        else if(response.data == "success"){
+                        else if(response.data.answer == "success"){
                             $state.go('login');
                         }
                     });
