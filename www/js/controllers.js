@@ -1,62 +1,73 @@
 angular.module('app.controllers', [])
-  
+
 .controller('loginCtrl', ['$scope', '$stateParams', '$http', '$ionicPopup', '$location', 'carryvar', '$state', '$ionicLoading', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 
 function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state, $ionicLoading, $timeout) {
-    
+
     $scope.data = {
         email: '',
         password: '',
         error: '',
-        login: function(){
-            if(this.email === ""){
-                $scope.showAlert("email");
-            }
-            else if(this.password === ""){
-                $scope.showAlert("password");
-            }
-            else{
-                $scope.showLoading();
-                $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{email: this.email, password: this.password })
-                    .then(function (response) {
-                        $scope.hideLoading();
-                        if(response.data.none == "email"){
-                            $scope.showAlert("email2");
-                        }
-                        else if(response.data.none == "password"){
-                            $scope.showAlert("password2");
-                        }
-                        else if(response.data.none == "none"){
-                            carryvar.name = response.data.name;
-                            carryvar.attempted = response.data.attempted;
-                            carryvar.correct = response.data.correct;
-                            carryvar.language = response.data.language;
-                            localStorage.setItem("id", response.data.id);
-                            if(response.data.attempted == "0"){
-                                carryvar.flag = '1';
-                            }
-                            else{
-                                carryvar.flag = '2';   
-                            }
-                            $scope.translate(response.data.language);
-                            $state.go('home');
-                        }
-                        else if(response.data.none == "complete"){
-                            carryvar.name = response.data.name;
-                            carryvar.score = response.data.score;
-                            carryvar.position = response.data.position;
-                            carryvar.language = response.data.language;
-                            localStorage.setItem("id", response.data.id);
-                            carryvar.flag = '3';
-                            $scope.translate(response.data.language);
-                            $state.go('home');
-                        }
-                    });
-                }
-            }
+        conn: '',
+        conn1: '',
+        conn2: ''
     };
+    $scope.login = function(){
+        if(this.email === ""){
+            $scope.showAlert("email");
+        }
+        else if(this.password === ""){
+            $scope.showAlert("password");
+        }
+        else{
+            $scope.data.conn = $timeout( function(){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Connection Error!!!',
+                    template: 'Connection to internet/server has been lost. Please try after sometime...'
+                });
+            }, 5000 );
+            $scope.showLoading();
+            $http.post("https://nijojob.heliohost.org/php/index.php",{email: $scope.data.email, password: $scope.data.password })
+                .then(function (response) {                     
+                    $scope.hideLoading();
+                    $timeout.cancel($scope.data.conn);
+                    if(response.data.none == "email"){
+                        $scope.showAlert("email2");
+                    }
+                    else if(response.data.none == "password"){
+                        $scope.showAlert("password2");
+                    }
+                    else if(response.data.none == "none"){
+                        carryvar.name = response.data.name;
+                        carryvar.attempted = response.data.attempted;
+                        carryvar.correct = response.data.correct;
+                        carryvar.language = response.data.language;
+                        localStorage.setItem("id", response.data.id);
+                        if(response.data.attempted == "0"){
+                            carryvar.flag = '1';
+                        }
+                        else{
+                            carryvar.flag = '2';
+                        }
+                        $scope.translate(response.data.language);
+                        $state.go('home');
+                    }
+                    else if(response.data.none == "complete"){
+                        carryvar.name = response.data.name;
+                        carryvar.score = response.data.score;
+                        carryvar.position = response.data.position;
+                        carryvar.language = response.data.language;
+                        localStorage.setItem("id", response.data.id);                     
+                        carryvar.flag = '3';
+                        $scope.translate(response.data.language);
+                        $state.go('home');
+                    }
+                });
+            }
+        };
+            
     $scope.translate = function(language){
         if(language == "English"){
             carryvar.A = 'A';
@@ -88,12 +99,12 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
             carryvar.submit = 'Submit';
             carryvar.congrats1 = 'Congragulations!!!You have completed the quiz. Your score is ';
             carryvar.congrats2 = ' and your rank is ';
-            carryvar.attempting1 = 'You have attempted ';
-            carryvar.attempting2 = ' questions correctly out of ';
-            carryvar.attempting3 = ' . Click below to continue.';
-	    carryvar.oenglish = 'English';
-	    carryvar.omalayalam = 'Malayalam';
-	    carryvar.ohindi = 'Hindi';
+            carryvar.attempting1 = 'Out of ';
+            carryvar.attempting2 = ' questions, you have attempted ';
+            carryvar.attempting3 = ' correctly. Click below to continue.';
+            carryvar.oenglish = 'English';
+    	    carryvar.omalayalam = 'Malayalam';
+    	    carryvar.ohindi = 'Hindi';
         }
         else if(language == "Malayalam"){
             carryvar.A = 'എ';
@@ -128,9 +139,9 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
             carryvar.attempting1 = 'നിങ്ങൾ ';
             carryvar.attempting2 = ' ചോദ്യങ്ങളിൽ നിന്ന്  ';
             carryvar.attempting3 = ' ചോദ്യങ്ങൾ ശരിയായി ശ്രമിച്ചു. തുടരുന്നതിന് ചുവടെ ക്ലിക്കുചെയ്യുക.';
-		carryvar.oenglish = 'ഇംഗ്ലീഷ്';
-		carryvar.omalayalam = 'മലയാളം';
-		carryvar.ohindi = 'ഹിന്ദി';
+    		carryvar.oenglish = 'ഇംഗ്ലീഷ്';
+    		carryvar.omalayalam = 'മലയാളം';
+    		carryvar.ohindi = 'ഹിന്ദി';
         }
         else if(language == "Hindi"){
             carryvar.A = 'ए';
@@ -165,12 +176,12 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
             carryvar.attempting1 = 'आपने ';
             carryvar.attempting2 = ' में से ';
             carryvar.attempting3 = ' प्रश्न सही तरीके से करने का प्रयास किया है। जारी रखने के लिए नीचे क्लिक करें।';
-		carryvar.oenglish = 'अंग्रेज़ी';
-		carryvar.omalayalam = 'मलयालम';
-		carryvar.ohindi = 'हिंदी';
+    		carryvar.oenglish = 'अंग्रेज़ी';
+    		carryvar.omalayalam = 'मलयालम';
+    		carryvar.ohindi = 'हिंदी';
         }
     };
-    
+
     $scope.showAlert = function(input) {
         if(input == "email"){
             var alertPopup = $ionicPopup.alert({
@@ -197,7 +208,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
             });
         }
     };
-    
+
     $scope.showLoading = function() {
         $ionicLoading.show({
             template: '<ion-spinner icon="dots"></ion-spinner>'
@@ -207,26 +218,64 @@ function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state,
     $scope.hideLoading = function(){
         $ionicLoading.hide();
     };
-    
-    $scope.$on('$stateChangeSuccess', 
+
+    $scope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams){
-            var conn = $timeout( function(){
+            console.log(this.device.model);
+            console.log(this.device.version);
+            console.log(this.device.platform);
+            console.log(this.device.manufacturer);
+            console.log(this.device.uuid);
+            $scope.data.conn1 = $timeout( function(){
                 var alertPopup = $ionicPopup.alert({
                     title: 'Connection Error!!!',
                     template: 'Please connect to internet to proceed....'
                 });
             }, 3000 );
-            $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{Uid: "id"})
+            $http.post("https://nijojob.heliohost.org/php/index.php",{Uid: "id"})
             .then(function (response) {
-                $timeout.cancel(conn);
+                $timeout.cancel($scope.data.conn1);
             });
-            if(angular.isNumber(localStorage.getItem("id")) == "true"){
-                $state.go('home');
+            if(localStorage.getItem("id") != null){
+                $scope.data.conn2 = $timeout( function(){
+                    console.log("timeout")
+                }, 5000 );
+                $scope.showLoading();
+                $http.post("https://nijojob.heliohost.org/php/index.php",{Iid: localStorage.getItem("id") })
+                    .then(function (response) {                     
+                        $scope.hideLoading();
+                        $timeout.cancel($scope.data.conn2);
+                        if(response.data.none == "none"){
+                            carryvar.name = response.data.name;
+                            carryvar.attempted = response.data.attempted;
+                            carryvar.correct = response.data.correct;
+                            carryvar.language = response.data.language;
+                            localStorage.setItem("id", response.data.id);
+                            if(response.data.attempted == "0"){
+                                carryvar.flag = '1';
+                            }
+                            else{
+                                carryvar.flag = '2';
+                            }
+                            $scope.translate(response.data.language);
+                            $state.go('home');
+                        }
+                        else if(response.data.none == "complete"){
+                            carryvar.name = response.data.name;
+                            carryvar.score = response.data.score;
+                            carryvar.position = response.data.position;
+                            carryvar.language = response.data.language;
+                            localStorage.setItem("id", response.data.id);                       
+                            carryvar.flag = '3';
+                            $scope.translate(response.data.language);
+                            $state.go('home');
+                        }
+                    });
             }
         });
-        
+
 }])
-   
+
 .controller('signupCtrl', ['$scope', '$stateParams', '$ionicPopup', '$http', '$location', 'carryvar', '$state', '$ionicLoading', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
@@ -237,6 +286,7 @@ function ($scope, $stateParams, $ionicPopup, $http, $location, carryvar, $state,
         password: '',
         cpassword: '',
         language: '',
+        conn: '',
         signup: function(){
             if($scope.data.name === ""){
                 $scope.showAlert("name");
@@ -252,13 +302,20 @@ function ($scope, $stateParams, $ionicPopup, $http, $location, carryvar, $state,
             }
             else{
                 $scope.showLoading();
-                $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{name: this.name, email: this.email, passwd: this.password, language: this.language})
+                $scope.data.conn = $timeout( function(){
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Connection Error!!!',
+                        template: 'Connection to internet/server has been lost. Please try after sometime...'
+                    });
+                }, 5000 );
+                $http.post("https://nijojob.heliohost.org/php/index.php",{name: this.name, email: this.email, passwd: this.password, language: this.language})
                     .then(function (response) {
                         $scope.hideLoading();
-                        if(response.data == "email"){
+                        $timeout.cancel($scope.data.conn);
+                        if(response.data.answer == "email"){
                             $scope.showAlert("email");
                         }
-                        else if(response.data == "success"){
+                        else if(response.data.answer == "success"){
                             $state.go('login');
                         }
                     });
@@ -306,8 +363,8 @@ function ($scope, $stateParams, $ionicPopup, $http, $location, carryvar, $state,
     $scope.hideLoading = function(){
         $ionicLoading.hide();
     };
-    
-    $scope.$on('$stateChangeSuccess', 
+
+    $scope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams){
             var conn = $timeout( function(){
                 var alertPopup = $ionicPopup.alert({
@@ -315,13 +372,13 @@ function ($scope, $stateParams, $ionicPopup, $http, $location, carryvar, $state,
                     template: 'Connection to internet/server has been lost. Please try after sometime...'
                 });
             }, 3000 );
-            $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{Uid: "id"})
+            $http.post("https://nijojob.heliohost.org/php/index.php",{Uid: "id"})
             .then(function (response) {
                 $timeout.cancel(conn);
             });
         });
 }])
-   
+
 .controller('homeCtrl', ['$scope', '$stateParams', '$http', '$ionicPopup', '$timeout', 'carryvar', '$state', '$ionicLoading', '$interval', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
@@ -348,7 +405,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
 	    ohindi: carryvar.ohindi,
 	    omalayalam: carryvar.omalayalam
     };
-    
+
     $scope.question = function(){
             carryvar.language = $scope.data.language;
             if($scope.data.position !== ""){
@@ -359,10 +416,10 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                         template: 'Connection to internet/server has been lost. Please try after sometime...'
                     });
                 }, 3000 );
-                $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{count: '0', language: carryvar.language, id: localStorage.getItem("id")} )
+                $http.post("https://nijojob.heliohost.org/php/index.php",{count: '0', language: carryvar.language, id: localStorage.getItem("id")} )
                 .then(function (response) {
                     counter = Number(response.data.attempted) + 1;
-                    $http.post( "https://nijojob.heliohost.org/NewApp/www/php/index.php", {counter: counter, language: carryvar.language, id: localStorage.getItem("id")} )
+                    $http.post( "https://nijojob.heliohost.org/php/index.php", {counter: counter, language: carryvar.language, id: localStorage.getItem("id")} )
 						.then(function( response ) {
                             $timeout.cancel($scope.data.conn);
                             $scope.hideLoading();
@@ -390,31 +447,31 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                 $scope.data.fquest = '1';
             }
         };
-    
+
     $scope.logout = function(){
         var alertPopup = $ionicPopup.alert({
             title: carryvar.ltitle,
             template: carryvar.ltemplate,
             buttons: [
-                    { 
+                    {
                         text: carryvar.no,
                         type: 'button-calm',
                         onTap: function(e) {
                             $state.go('home');
                         }
                     },
-                    { 
+                    {
                         text: carryvar.yes,
                         type: 'button-positive',
                         onTap: function(e) {
                             localStorage.removeItem("id");
-                            $state.go('login'); 
+                            $state.go('login');
                         }
                     }
                 ]
         });
     };
-    
+
     $scope.showLoading = function() {
         $ionicLoading.show({
             template: '<ion-spinner icon="dots"></ion-spinner>'
@@ -424,66 +481,75 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
     $scope.hideLoading = function(){
         $ionicLoading.hide();
     };
-    
+
     $scope.setmessage = function(){
         if(carryvar.flag == '1'){
             $scope.data.message = carryvar.hi + ' ' + $scope.data.name + ',<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;' + carryvar.welcome;
         }
         else if(carryvar.flag == '3'){
-            $scope.data.message = carryvar.hi + ' ' + $scope.data.name + ',<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;' + carryvar.congrats1 + $scope.data.score + carryvar.congrats2 + $scope.data.position;
+            $scope.data.message = carryvar.hi + ' ' + $scope.data.name + ',<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;' + carryvar.congrats1 + $scope.data.score + "%" + carryvar.congrats2 + $scope.data.position;
         }
         else if(carryvar.flag == '2'){
             $scope.data.message = carryvar.hi + ' ' + $scope.data.name + ',<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;' + carryvar.attempting1 + $scope.data.attempted + carryvar.attempting2 + $scope.data.correct +  carryvar.attempting3;
         }
     };
-    
+
     $scope.chglanguage = function(){
-	if($scope.data.nlanguage == 'अंग्रेज़ी'){
-		$scope.data.nlanguage = 'English';
-	}
-	else if($scope.data.nlanguage == 'ഇംഗ്ലീഷ്'){
-		$scope.data.nlanguage = 'English';
-	}
-	else if($scope.data.nlanguage == 'मलयालम'){
-		$scope.data.nlanguage = 'Malayalam';
-	}
-	else if($scope.data.nlanguage == 'മലയാളം'){
-		$scope.data.nlanguage = 'Malayalam';
-	}
-	else if($scope.data.nlanguage == 'हिंदी'){
-		$scope.data.nlanguage = 'Hindi';
-	}
-	else if($scope.data.nlanguage == 'ഹിന്ദി'){
-		$scope.data.nlanguage = 'Hindi';
-	}
-        $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{nlanguage: $scope.data.nlanguage, id: localStorage.getItem("id")} )
+    	if($scope.data.nlanguage == 'अंग्रेज़ी'){
+    		$scope.data.nlanguage = 'English';
+    	}
+    	else if($scope.data.nlanguage == 'ഇംഗ്ലീഷ്'){
+    		$scope.data.nlanguage = 'English';
+    	}
+    	else if($scope.data.nlanguage == 'मलयालम'){
+    		$scope.data.nlanguage = 'Malayalam';
+    	}
+    	else if($scope.data.nlanguage == 'മലയാളം'){
+    		$scope.data.nlanguage = 'Malayalam';
+    	}
+    	else if($scope.data.nlanguage == 'हिंदी'){
+    		$scope.data.nlanguage = 'Hindi';
+    	}
+    	else if($scope.data.nlanguage == 'ഹിന്ദി'){
+    		$scope.data.nlanguage = 'Hindi';
+    	}
+        $scope.showLoading();
+        $scope.data.conn = $timeout( function(){
+            var alertPopup = $ionicPopup.alert({
+                title: 'Connection Error!!!',
+                template: 'Connection to internet/server has been lost. Please try after sometime...'
+            });
+        }, 3000 );
+        $http.post("https://nijojob.heliohost.org/php/index.php",{nlanguage: $scope.data.nlanguage, id: localStorage.getItem("id")} )
             .then(function (response) {
+                $timeout.cancel($scope.data.conn);
+                $scope.hideLoading();
                 var alertPopup = $ionicPopup.alert({
                     title: carryvar.cltitle,
                     template: carryvar.cltemplate,
                     buttons: [
-                            { 
+                            {
                                 text: carryvar.no,
                                 type: 'button-calm',
                                 onTap: function(e) {
                                     $state.go('home');
                                 }
                             },
-                            { 
+                            {
                                 text: carryvar.yes,
                                 type: 'button-positive',
                                 onTap: function(e) {
                                     localStorage.removeItem("id");
-                                    $state.go('login'); 
+                                    $state.go('login');
                                 }
                             }
                         ]
                 });
             });
     };
-    
-    $scope.$on('$stateChangeSuccess', 
-        function(event, toState, toParams, fromState, fromParams){ 
+
+    $scope.$on('$stateChangeSuccess',
+        function(event, toState, toParams, fromState, fromParams){
             $scope.setmessage();
             $scope.data.name = carryvar.name;
             $scope.data.attempted = carryvar.attempted;
@@ -498,7 +564,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
             }
         });
 }])
-   
+
 .controller('questionsCtrl', ['$scope', '$stateParams', '$http', '$ionicPopup', '$timeout', 'carryvar', '$state', '$interval', '$ionicLoading', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
@@ -531,35 +597,46 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
         cancel: carryvar.cancel,
         conn: ''
     };
-    
+
     $scope.logout = function(){
-        console.log("hai");
         var alertPopup = $ionicPopup.alert({
             title: carryvar.ltitle,
             template: carryvar.ltemplate,
             buttons: [
-                    { 
+                    {
                         text: carryvar.no,
                         type: 'button-calm',
                         onTap: function(e) {
                             $state.go('questions');
                         }
                     },
-                    { 
+                    {
                         text: carryvar.yes,
                         type: 'button-positive',
                         onTap: function(e) {
-                            localStorage.removeItem("id");
-                            $interval.cancel($scope.data.promise);
-                            $scope.data.promise = '';
-                            $scope.data.timer = 100000;
-                            $state.go('login'); 
+                            $scope.showLoading();
+                            $scope.data.conn = $timeout( function(){
+                                var alertPopup = $ionicPopup.alert({
+                                    title: 'Connection Error!!!',
+                                    template: 'Connection to internet/server has been lost. Please try after sometime...'
+                                });
+                            }, 3000 );
+                            $http.post( "https://nijojob.heliohost.org/php/index.php", {count: 1, language: carryvar.language, id: localStorage.getItem("id")})
+                                .then(function( response ) {
+                                    $timeout.cancel($scope.data.conn);
+                                    $scope.hideLoading();
+                                    localStorage.removeItem("id");
+                                    $interval.cancel($scope.data.promise);
+                                    $scope.data.promise = '';
+                                    $scope.data.timer = 100000;
+                                    $state.go('login');
+                                });
                         }
                     }
                 ]
-        });  
+        });
     };
-        
+
     $scope.enter = function(){
         if($scope.data.option !== ""){
             $scope.showLoading();
@@ -569,18 +646,18 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                     template: 'Connection to internet/server has been lost. Please try after sometime...'
                 });
             }, 3000 );
-            $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{question: $scope.data.no, language: carryvar.language, answer: $scope.data.option, id: localStorage.getItem("id")})
+            $http.post("https://nijojob.heliohost.org/php/index.php",{question: $scope.data.no, language: carryvar.language, answer: $scope.data.option, id: localStorage.getItem("id")})
                 .then(function (response) {
                     $timeout.cancel($scope.data.conn);
                     $scope.hideLoading();
-                    if(response.data == "correct"){
+                    if(response.data.answer == "correct"){
                         $scope.data.pcount = '0';
                         $interval.cancel($scope.data.promise);
                         $scope.data.promise = '';
                         $scope.data.timer = 30;
                         $scope.submition("correct");
                     }
-                    else if(response.data == "incorrect"){
+                    else if(response.data.answer == "incorrect"){
                         $interval.cancel($scope.data.promise);
                         $scope.data.pcount = '0';
                         $scope.data.promise = '';
@@ -596,15 +673,15 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
             });
         }
     };
-        
-    $scope.$on('$stateChangeSuccess', 
-        function(event, toState, toParams, fromState, fromParams){ 
+
+    $scope.$on('$stateChangeSuccess',
+        function(event, toState, toParams, fromState, fromParams){
             $scope.finterval();
             if(angular.isNumber(localStorage.getItem("id")) == "false"){
                 $state.go('login');
             }
         });
-        
+
     $scope.showLoading = function() {
         $ionicLoading.show({
             template: '<ion-spinner icon="dots"></ion-spinner>'
@@ -614,12 +691,12 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
     $scope.hideLoading = function(){
         $ionicLoading.hide();
     };
-    
+
     $scope.finterval = function() {
         $scope.data.promise = $interval(function() {
                 if ($scope.data.timer > 0) {
                     $scope.data.timer -= 1;
-                } 
+                }
                 else {
                     $interval.cancel($scope.data.promise);
                     $scope.data.promise = '';
@@ -628,6 +705,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                 }
             }, 1000);
     };
+    
     $scope.submition = function(action){
         if(action == "correct"){
             $scope.data.message1 = carryvar.success1;
@@ -676,7 +754,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
         $scope.data.message2 = carryvar.forward;
         $scope.data.flag = '2';
     };
-    
+
     $scope.next = function(){
         $scope.showLoading();
         $scope.data.conn = $timeout( function(){
@@ -685,10 +763,10 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                 template: 'Connection to internet/server has been lost. Please try after sometime...'
             });
         }, 3000 );
-        $http.post( "https://nijojob.heliohost.org/NewApp/www/php/index.php", {count: $scope.data.pcount, language: carryvar.language, id: localStorage.getItem("id")})
+        $http.post( "https://nijojob.heliohost.org/php/index.php", {count: $scope.data.pcount, language: carryvar.language, id: localStorage.getItem("id")})
 			.then(function( response ) {
 				counter = Number(response.data.attempted) + 1;
-                $http.post( "https://nijojob.heliohost.org/NewApp/www/php/index.php", { counter: counter, language: carryvar.language, id: localStorage.getItem("id") } )
+                $http.post( "https://nijojob.heliohost.org/php/index.php", { counter: counter, language: carryvar.language, id: localStorage.getItem("id") } )
                     .then(function( response ) {
                         $timeout.cancel($scope.data.conn);
                         $scope.hideLoading();
@@ -718,7 +796,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                     });
 			});
     };
-    
+
     $scope.cancel = function(){
         $scope.showLoading();
         $scope.data.conn = $timeout( function(){
@@ -727,7 +805,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                 template: 'Connection to internet/server has been lost. Please try after sometime...'
             });
         }, 3000 );
-        $http.post( "https://nijojob.heliohost.org/NewApp/www/php/index.php", {count: $scope.data.pcount, language: carryvar.language, id: localStorage.getItem("id") })
+        $http.post( "https://nijojob.heliohost.org/php/index.php", {count: $scope.data.pcount, language: carryvar.language, id: localStorage.getItem("id") })
             .then(function( response ) {
                 $timeout.cancel($scope.data.conn);
                 $scope.hideLoading();
@@ -741,7 +819,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                 $state.go('home', $stateParams, {reload: true, inherit: false});
             });
     };
-    
+
     $scope.alerting = function() {
         var myF = angular.element( document.querySelector( '.nijo' ) );
         myF.removeClass('nijo');
@@ -767,4 +845,3 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
         }
     };
 }])
- 

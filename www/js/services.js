@@ -12,7 +12,7 @@ angular.module('app.services', [])
     $ionicPlatform.ready(function(){
         if( ionic.Platform.isAndroid() )  { 
                 admobid = { // for Android
-                banner: 'ca-app-pub-3940256099942544/6300978111' // Change this to your Ad Unit Id for banner...
+                banner: 'ca-app-pub-8486592971726155/2296307113' // Change this to your Ad Unit Id for banner...
             };
             if(AdMob) 
                 AdMob.createBanner( {
