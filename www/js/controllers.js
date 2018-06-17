@@ -1,7 +1,342 @@
 angular.module('app.controllers', [])
+<<<<<<< HEAD
 
 .controller('homeCtrl', ['$scope', '$stateParams', '$http', '$ionicPopup', '$timeout', 'carryvar', '$state', '$ionicLoading', '$interval', 
 // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+=======
+
+.controller('loginCtrl', ['$scope', '$stateParams', '$http', '$ionicPopup', '$location', 'carryvar', '$state', '$ionicLoading', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+
+function ($scope, $stateParams, $http, $ionicPopup, $location, carryvar, $state, $ionicLoading, $timeout) {
+
+    $scope.data = {
+        email: '',
+        password: '',
+        error: '',
+        login: function(){
+            if(this.email === ""){
+                $scope.showAlert("email");
+            }
+            else if(this.password === ""){
+                $scope.showAlert("password");
+            }
+            else{
+                $scope.showLoading();
+                $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{email: this.email, password: this.password })
+                    .then(function (response) {
+                        $scope.hideLoading();
+                        if(response.data.none == "email"){
+                            $scope.showAlert("email2");
+                        }
+                        else if(response.data.none == "password"){
+                            $scope.showAlert("password2");
+                        }
+                        else if(response.data.none == "none"){
+                            carryvar.name = response.data.name;
+                            carryvar.attempted = response.data.attempted;
+                            carryvar.correct = response.data.correct;
+                            carryvar.language = response.data.language;
+                            localStorage.setItem("id", response.data.id);
+                            if(response.data.attempted == "0"){
+                                carryvar.flag = '1';
+                            }
+                            else{
+                                carryvar.flag = '2';
+                            }
+                            $scope.translate(response.data.language);
+                            $state.go('home');
+                        }
+                        else if(response.data.none == "complete"){
+                            carryvar.name = response.data.name;
+                            carryvar.score = response.data.score;
+                            carryvar.position = response.data.position;
+                            carryvar.language = response.data.language;
+                            localStorage.setItem("id", response.data.id);
+                            carryvar.flag = '3';
+                            $scope.translate(response.data.language);
+                            $state.go('home');
+                        }
+                    });
+                }
+            }
+    };
+    $scope.translate = function(language){
+        if(language == "English"){
+            carryvar.A = 'A';
+            carryvar.B = 'B';
+            carryvar.C = 'C';
+            carryvar.D = 'D';
+            carryvar.success1 = 'Your answer is correct.';
+            carryvar.wrong1 = 'Your answer is incorrect.';
+            carryvar.timeout1 = 'You have exceeded your time limit.';
+            carryvar.forward = 'Proceed to next question';
+            carryvar.otitle = 'No option selected!!!';
+            carryvar.otemplate = 'Please select an answer    ';
+            carryvar.ltitle = 'Confirm Log Out';
+            carryvar.ltemplate = 'Do you want to log out?';
+            carryvar.cplanguage = 'Want to change your preferred language?';
+            carryvar.cltitle = 'Change successful!!!';
+            carryvar.cltemplate = 'To let the change take effect, proceed to log out and log back in.';
+            carryvar.tlanguage = 'New language';
+            carryvar.change = 'Proceed to change';
+            carryvar.cancel = 'Cancel';
+            carryvar.next = 'Next';
+            carryvar.yes = 'Yes';
+            carryvar.no = 'No';
+            carryvar.ctitle = 'Quiz Complete!!!';
+            carryvar.ctemplate = 'Congragulations!!! You have completed all the questions ';
+            carryvar.questions = 'Go to Questions';
+            carryvar.welcome = 'Welcome to Quizzy!!! Click below to start answering the questions ';
+            carryvar.hi = 'Hai';
+            carryvar.submit = 'Submit';
+            carryvar.congrats1 = 'Congragulations!!!You have completed the quiz. Your score is ';
+            carryvar.congrats2 = ' and your rank is ';
+            carryvar.attempting1 = 'You have attempted ';
+            carryvar.attempting2 = ' questions correctly out of ';
+            carryvar.attempting3 = ' . Click below to continue.';
+	    carryvar.oenglish = 'English';
+	    carryvar.omalayalam = 'Malayalam';
+	    carryvar.ohindi = 'Hindi';
+        }
+        else if(language == "Malayalam"){
+            carryvar.A = 'എ';
+            carryvar.B = 'ബി';
+            carryvar.C = 'സി';
+            carryvar.D = 'ഡി';
+            carryvar.success1 = 'നിങ്ങളുടെ ഉത്തരം ശരിയാണ്.';
+            carryvar.wrong1 = 'നിങ്ങളുടെ ഉത്തരം തെറ്റാണ്.';
+            carryvar.timeout1 = 'നിങ്ങളുടെ സമയപരിധി കവിഞ്ഞു.';
+            carryvar.forward = 'അടുത്ത ചോദ്യത്തിലേക്ക് പോവുക.';
+            carryvar.otitle = 'ഓപ്ഷൻ തിരഞ്ഞെടുത്തില്ല !!!';
+            carryvar.otemplate = 'ഒരു ഉത്തരം ദയവായി തിരഞ്ഞെടുക്കുക     ';
+            carryvar.ltitle = 'ലോഗ് ഔട്ട് സ്ഥിരീകരിക്കുക';
+            carryvar.ltemplate = 'ലോഗ് ഔട്ട് ചെയ്യണോ?';
+            carryvar.cplanguage = 'നിങ്ങളുടെ ഇഷ്ട ഭാഷ മാറ്റണോ?';
+            carryvar.cltitle = 'മാറ്റം വിജയകരമായി!';
+            carryvar.cltemplate = 'മാറ്റം പ്രാബല്യത്തിൽ വരുത്തുന്നതിന്, പുറത്തുകടന്നതിനുശേഷം വീണ്ടും ലോഗ് ഇൻ ചെയ്യുക.';
+            carryvar.tlanguage = 'പുതിയ ഭാഷ';
+            carryvar.change = 'മാറ്റാൻ മുന്നോട്ട് പോവുക';
+            carryvar.cancel = 'റദ്ദാക്കുക';
+            carryvar.next = 'അടുത്തത്';
+            carryvar.yes = 'അതെ';
+            carryvar.no = 'ഇല്ല';
+            carryvar.ctitle = 'ക്വിസ് പൂർത്തിയാക്കുക !!!';
+            carryvar.ctemplate = 'അഭിനന്ദനങ്ങൾ !!! നിങ്ങൾ എല്ലാ ചോദ്യങ്ങളും പൂർത്തിയാക്കി ';
+            carryvar.questions = 'ചോദ്യങ്ങളിലേയ്ക്ക് പോകുക';
+            carryvar.welcome = 'ക്വിസ്ജിയിലേക്ക് സ്വാഗതം !!! ചോദ്യങ്ങൾക്ക് ഉത്തരം നൽകാനായി ചുവടെ ക്ലിക്കുചെയ്യുക';
+            carryvar.hi = 'നമസ്കാരം ';
+            carryvar.submit = 'സമർപ്പിക്കുക';
+            carryvar.congrats1 = 'അഭിനന്ദനങ്ങൾ! നിങ്ങൾ ക്വിസ് പൂർത്തിയാക്കി. നിങ്ങളുടെ സ്കോർ ';
+            carryvar.congrats2 = ' , നിങ്ങളുടെ റാങ്ക് ';
+            carryvar.attempting1 = 'നിങ്ങൾ ';
+            carryvar.attempting2 = ' ചോദ്യങ്ങളിൽ നിന്ന്  ';
+            carryvar.attempting3 = ' ചോദ്യങ്ങൾ ശരിയായി ശ്രമിച്ചു. തുടരുന്നതിന് ചുവടെ ക്ലിക്കുചെയ്യുക.';
+		carryvar.oenglish = 'ഇംഗ്ലീഷ്';
+		carryvar.omalayalam = 'മലയാളം';
+		carryvar.ohindi = 'ഹിന്ദി';
+        }
+        else if(language == "Hindi"){
+            carryvar.A = 'ए';
+            carryvar.B = 'बी';
+            carryvar.C = 'सी';
+            carryvar.D = 'डी';
+            carryvar.success1 = 'आपका उत्तर सही है।';
+            carryvar.wrong1 = 'आपका जवाब गलत है।';
+            carryvar.timeout1 = 'आपने अपनी समय सीमा पार कर ली है।';
+            carryvar.forward = 'अगले प्रश्न आगे बढ़ें';
+            carryvar.otitle = 'कोई विकल्प नहीं चुना !!!';
+            carryvar.otemplate = 'कृपया एक उत्तर चुनें     ';
+            carryvar.ltitle = 'लॉग आउट की पुष्टि करें';
+            carryvar.ltemplate = 'क्या आप लॉग आउट करना चाहते हैं?';
+            carryvar.cplanguage = 'अपनी पसंदीदा भाषा बदलना चाहते हैं?';
+            carryvar.cltitle = 'सफल बदलाव !!!';
+            carryvar.cltemplate = 'परिवर्तन प्रभावी होने देने के लिए, लॉग आउट और आगे चलकर लॉग इन करें।ग इन करें।';
+            carryvar.tlanguage = 'नई भाषा';
+            carryvar.change = 'बदलने के लिए आगे बढ़ें';
+            carryvar.cancel = 'रद्द करना';
+            carryvar.next = 'आगामी';
+            carryvar.yes = 'हाँ';
+            carryvar.no = 'नहीं';
+            carryvar.ctitle = 'प्रश्नोत्तरी पूर्ण !!!';
+            carryvar.ctemplate = 'बधाई हो !!! आपने सभी प्रश्न पूरे किए हैं।';
+            carryvar.questions = 'प्रश्नों पर जाएं';
+            carryvar.welcome = 'क्विज में आपका स्वागत है !!! सवालों के जवाब देने के लिए नीचे क्लिक कर';
+            carryvar.hi = 'नमस्';
+            carryvar.submit = 'जमा करें';
+            carryvar.congrats1 = 'बधाई हो! आपने प्रश्नोत्तरी पूरी कर ली है आपका स्क ';
+            carryvar.congrats2 = ' है और आपकी रैंक है ';
+            carryvar.attempting1 = 'आपने ';
+            carryvar.attempting2 = ' में से ';
+            carryvar.attempting3 = ' प्रश्न सही तरीके से करने का प्रयास किया है। जारी रखने के लिए नीचे क्लिक करें।';
+		carryvar.oenglish = 'अंग्रेज़ी';
+		carryvar.omalayalam = 'मलयालम';
+		carryvar.ohindi = 'हिंदी';
+        }
+    };
+
+    $scope.showAlert = function(input) {
+        if(input == "email"){
+            var alertPopup = $ionicPopup.alert({
+                title: 'Empty Email!!!',
+                template: 'Please enter your email address....'
+            });
+        }
+        else if(input == "password"){
+            var alertPopup = $ionicPopup.alert({
+                title: 'Empty Password!!!',
+                template: 'Please enter your password....'
+            });
+        }
+        else if(input == "email2"){
+            var alertPopup = $ionicPopup.alert({
+                title: 'Wrong Email!!!',
+                template: 'Please enter your correct email address....'
+            });
+        }
+        else if(input == "password2"){
+            var alertPopup = $ionicPopup.alert({
+                title: 'Wrong Password!!!',
+                template: 'Please enter your correct password....'
+            });
+        }
+    };
+
+    $scope.showLoading = function() {
+        $ionicLoading.show({
+            template: '<ion-spinner icon="dots"></ion-spinner>'
+        });
+    };
+
+    $scope.hideLoading = function(){
+        $ionicLoading.hide();
+    };
+
+    $scope.$on('$stateChangeSuccess',
+        function(event, toState, toParams, fromState, fromParams){
+            var conn = $timeout( function(){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Connection Error!!!',
+                    template: 'Please connect to internet to proceed....'
+                });
+            }, 3000 );
+            $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{Uid: "id"})
+            .then(function (response) {
+                $timeout.cancel(conn);
+            });
+            if(angular.isNumber(localStorage.getItem("id")) == "true"){
+                $state.go('home');
+            }
+        });
+
+}])
+
+.controller('signupCtrl', ['$scope', '$stateParams', '$ionicPopup', '$http', '$location', 'carryvar', '$state', '$ionicLoading', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams, $ionicPopup, $http, $location, carryvar, $state, $ionicLoading, $timeout) {
+    $scope.data = {
+        name: '',
+        email: '',
+        password: '',
+        cpassword: '',
+        language: '',
+        conn: '',
+        signup: function(){
+            if($scope.data.name === ""){
+                $scope.showAlert("name");
+            }
+            else if($scope.data.email === ""){
+                $scope.showAlert("email");
+            }
+            else if($scope.data.password === ""){
+                $scope.showAlert("password");
+            }
+            else if($scope.data.password != $scope.data.cpassword){
+                $scope.showAlert("cpassword");
+            }
+            else{
+                $scope.showLoading();
+                $scope.data.conn = $timeout( function(){
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Connection Error!!!',
+                        template: 'Connection to internet/server has been lost. Please try after sometime...'
+                    });
+                }, 5000 );
+                $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{name: this.name, email: this.email, passwd: this.password, language: this.language})
+                    .then(function (response) {
+                        $scope.hideLoading();
+                        $interval.cancel($scope.data.conn);
+                        if(response.data.answer == "email"){
+                            $scope.showAlert("email");
+                        }
+                        else if(response.data.answer == "success"){
+                            $state.go('login');
+                        }
+                    });
+            }
+        }
+    };
+    $scope.showAlert = function(input) {
+        if(input == "name"){
+            var alertPopup = $ionicPopup.alert({
+                title: 'Empty Name!!!',
+                template: 'Please enter your name....'
+            });
+        }
+        else if(input == "email"){
+            var alertPopup = $ionicPopup.alert({
+                title: 'Empty Email!!!',
+                template: 'Please enter your email address....'
+            });
+        }
+        else if(input == "password"){
+            var alertPopup = $ionicPopup.alert({
+                title: 'Empty Password!!!',
+                template: 'Please enter your password....'
+            });
+        }
+        else if(input == "cpassword"){
+            var alertPopup = $ionicPopup.alert({
+                title: 'Password don\'t match!!!',
+                template: 'Please re-enter your password....'
+            });
+        }
+        else if(input == "email2"){
+            var alertPopup = $ionicPopup.alert({
+                title: 'Email address already used!!!',
+                template: 'Please enter another email address....'
+            });
+        }
+    };
+    $scope.showLoading = function() {
+        $ionicLoading.show({
+            template: '<ion-spinner icon="dots"></ion-spinner>'
+        });
+    };
+
+    $scope.hideLoading = function(){
+        $ionicLoading.hide();
+    };
+
+    $scope.$on('$stateChangeSuccess',
+        function(event, toState, toParams, fromState, fromParams){
+            var conn = $timeout( function(){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Connection Error!!!',
+                    template: 'Connection to internet/server has been lost. Please try after sometime...'
+                });
+            }, 3000 );
+            $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{Uid: "id"})
+            .then(function (response) {
+                $timeout.cancel(conn);
+            });
+        });
+}])
+
+.controller('homeCtrl', ['$scope', '$stateParams', '$http', '$ionicPopup', '$timeout', 'carryvar', '$state', '$ionicLoading', '$interval', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+>>>>>>> 2a04e1e45a8c4d2a44cc8855bf4df4e9f92a6c75
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, $ionicLoading, $interval) {
@@ -61,9 +396,39 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
             else{
                 $scope.data.fquest = '1';
             }
+<<<<<<< HEAD
         }; 
 
     $scope.showLoading = function(){
+=======
+        };
+
+    $scope.logout = function(){
+        var alertPopup = $ionicPopup.alert({
+            title: carryvar.ltitle,
+            template: carryvar.ltemplate,
+            buttons: [
+                    {
+                        text: carryvar.no,
+                        type: 'button-calm',
+                        onTap: function(e) {
+                            $state.go('home');
+                        }
+                    },
+                    {
+                        text: carryvar.yes,
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            localStorage.removeItem("id");
+                            $state.go('login');
+                        }
+                    }
+                ]
+        });
+    };
+
+    $scope.showLoading = function() {
+>>>>>>> 2a04e1e45a8c4d2a44cc8855bf4df4e9f92a6c75
         $ionicLoading.show({
             template: '<ion-spinner icon="dots"></ion-spinner>'
         });
@@ -86,6 +451,7 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
     };
 
     $scope.chglanguage = function(){
+<<<<<<< HEAD
     	if($scope.data.nlanguage == 'अंग्रेज़ी'){
     		$scope.data.nlanguage = 'English';
     	}
@@ -184,6 +550,45 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
                                     carryvar.oenglish = 'ഇംഗ്ലീഷ്';
                                     carryvar.omalayalam = 'മലയാളം';
                                 	carryvar.ohindi = 'ഹിന്ദി';
+=======
+	if($scope.data.nlanguage == 'अंग्रेज़ी'){
+		$scope.data.nlanguage = 'English';
+	}
+	else if($scope.data.nlanguage == 'ഇംഗ്ലീഷ്'){
+		$scope.data.nlanguage = 'English';
+	}
+	else if($scope.data.nlanguage == 'मलयालम'){
+		$scope.data.nlanguage = 'Malayalam';
+	}
+	else if($scope.data.nlanguage == 'മലയാളം'){
+		$scope.data.nlanguage = 'Malayalam';
+	}
+	else if($scope.data.nlanguage == 'हिंदी'){
+		$scope.data.nlanguage = 'Hindi';
+	}
+	else if($scope.data.nlanguage == 'ഹിന്ദി'){
+		$scope.data.nlanguage = 'Hindi';
+	}
+        $http.post("https://nijojob.heliohost.org/NewApp/www/php/index.php",{nlanguage: $scope.data.nlanguage, id: localStorage.getItem("id")} )
+            .then(function (response) {
+                var alertPopup = $ionicPopup.alert({
+                    title: carryvar.cltitle,
+                    template: carryvar.cltemplate,
+                    buttons: [
+                            {
+                                text: carryvar.no,
+                                type: 'button-calm',
+                                onTap: function(e) {
+                                    $state.go('home');
+                                }
+                            },
+                            {
+                                text: carryvar.yes,
+                                type: 'button-positive',
+                                onTap: function(e) {
+                                    localStorage.removeItem("id");
+                                    $state.go('login');
+>>>>>>> 2a04e1e45a8c4d2a44cc8855bf4df4e9f92a6c75
                                 }
                                 else if(localStorage.getItem("language") == "Hindi"){
                                     carryvar.A = 'ए';
@@ -231,17 +636,24 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
 
     $scope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams){
+<<<<<<< HEAD
             $scope.data.attempted = localStorage.getItem("attempted");
             $scope.data.correct = localStorage.getItem("correct");
             $scope.data.language = localStorage.getItem("language");
             $scope.data.score = localStorage.getItem("score");
             $scope.data.position = localStorage.getItem("position");
+=======
+>>>>>>> 2a04e1e45a8c4d2a44cc8855bf4df4e9f92a6c75
             $scope.setmessage();
         });
 }])
 
+<<<<<<< HEAD
 .controller('questionsCtrl', ['$scope', '$stateParams', '$http', '$ionicPopup', '$timeout', 'carryvar', '$state', '$interval', '$ionicLoading', 
 // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+=======
+.controller('questionsCtrl', ['$scope', '$stateParams', '$http', '$ionicPopup', '$timeout', 'carryvar', '$state', '$interval', '$ionicLoading', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+>>>>>>> 2a04e1e45a8c4d2a44cc8855bf4df4e9f92a6c75
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, $interval, $ionicLoading) {
@@ -274,6 +686,40 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
         conn: ''
     };
 
+<<<<<<< HEAD
+=======
+    $scope.logout = function(){
+        console.log("hai");
+        var alertPopup = $ionicPopup.alert({
+            title: carryvar.ltitle,
+            template: carryvar.ltemplate,
+            buttons: [
+                    {
+                        text: carryvar.no,
+                        type: 'button-calm',
+                        onTap: function(e) {
+                            $state.go('questions');
+                        }
+                    },
+                    {
+                        text: carryvar.yes,
+                        type: 'button-positive',
+                        onTap: function(e) {
+                          $http.post( "https://nijojob.heliohost.org/NewApp/www/php/index.php", {count: 1, language: carryvar.language, id: localStorage.getItem("id")})
+                            .then(function( response ) {
+                              localStorage.removeItem("id");
+                              $interval.cancel($scope.data.promise);
+                              $scope.data.promise = '';
+                              $scope.data.timer = 100000;
+                              $state.go('login');
+                            }
+                        }
+                    }
+                ]
+        });
+    };
+
+>>>>>>> 2a04e1e45a8c4d2a44cc8855bf4df4e9f92a6c75
     $scope.enter = function(){
         if($scope.data.option !== ""){
             $scope.showLoading();
@@ -312,7 +758,19 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
         }
     };
 
+<<<<<<< HEAD
     $scope.showLoading = function(){
+=======
+    $scope.$on('$stateChangeSuccess',
+        function(event, toState, toParams, fromState, fromParams){
+            $scope.finterval();
+            if(angular.isNumber(localStorage.getItem("id")) == "false"){
+                $state.go('login');
+            }
+        });
+
+    $scope.showLoading = function() {
+>>>>>>> 2a04e1e45a8c4d2a44cc8855bf4df4e9f92a6c75
         $ionicLoading.show({
             template: '<ion-spinner icon="dots"></ion-spinner>'
         });
@@ -322,7 +780,11 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
         $ionicLoading.hide();
     };
 
+<<<<<<< HEAD
     $scope.finterval = function(){
+=======
+    $scope.finterval = function() {
+>>>>>>> 2a04e1e45a8c4d2a44cc8855bf4df4e9f92a6c75
         $scope.data.promise = $interval(function() {
                 if ($scope.data.timer > 0) {
                     $scope.data.timer -= 1;
@@ -450,7 +912,11 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
             });
     };
 
+<<<<<<< HEAD
     $scope.alerting = function(){
+=======
+    $scope.alerting = function() {
+>>>>>>> 2a04e1e45a8c4d2a44cc8855bf4df4e9f92a6c75
         var myF = angular.element( document.querySelector( '.nijo' ) );
         myF.removeClass('nijo');
         if($scope.data.option == "A"){
@@ -474,9 +940,13 @@ function ($scope, $stateParams, $http, $ionicPopup, $timeout, carryvar, $state, 
             myE4.addClass('nijo');
         }
     };
+<<<<<<< HEAD
     
     $scope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams){
             $scope.finterval();
         });
 }])
+=======
+}])
+>>>>>>> 2a04e1e45a8c4d2a44cc8855bf4df4e9f92a6c75

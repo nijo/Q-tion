@@ -1,0 +1,35 @@
+<ion-view title="Signup" cache-view="false" id="page3" style="background-color: rgb(240, 240, 240);">
+  <ion-content padding="true" scroll="false" class="has-header">
+    <div class="spacer" style="height: 40px;"></div>
+    <form id="signup-form7" class="list">
+      <ion-list id="signup-list3">
+        <label class="item item-input list-items" id="signup-input12">
+          <span class="input-label">Name</span>
+          <input placeholder="" ng-model="data.name" type="text">
+        </label>
+        <label class="item item-input list-items" id="signup-input13">
+          <span class="input-label">Email</span>
+          <input placeholder="" ng-model="data.email" type="email">
+        </label>
+        <label class="item item-input list-items" id="signup-input14">
+          <span class="input-label">Password</span>
+          <input placeholder="" ng-model="data.password" type="password">
+        </label>
+        <label class="item item-input list-items" id="signup-input15">
+          <span class="input-label">Confirm Password</span>
+          <input placeholder="" ng-model="data.cpassword" type="password">
+        </label>
+        <label class="item item-select" id="signup-select2">
+          <span class="input-label">Preferred language</span>
+          <select ng-model="data.language">
+            <option selected>English</option>
+            <option>Malayalam</option>
+            <option>Hindi</option>
+          </select>
+        </label>
+      </ion-list>
+      <div class="spacer" style="height: 40px;"></div>
+      <button id="signup-button4" ng-click="data.signup()" style="color:#444444;" class="button button-light button-block">Sign up</button>
+    </form>
+  </ion-content>
+</ion-view>
