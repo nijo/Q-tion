@@ -9823,3 +9823,19 @@ a.button {
 
 ion-view, .pane, .view {
   background-color: #F8F8F8; }
+  
+#splash-container1{
+    top: 30%;
+    position: absolute;
+    left: 25%;
+    text-align: center;
+}
+
+#splash-container1 h2{
+    font-size: 400%;
+    font-family: 'Helvetica';
+}
+  
+#splash-container1 h1{
+    font-size: 600%;
+}
